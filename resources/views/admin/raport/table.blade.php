@@ -1,63 +1,103 @@
-<h4>Data Siswa</h4>
-<table class="min-w-full bg-white rounded-lg">
-    <tbody>
-        <tr>
-            <td class="px-6 py-3 text-gray-600 font-bold">NIS</td>
-            <td class="px-6 py-3 text-gray-900 underline">{{ $siswa->nis }}</td>
-        </tr>
-        <tr>
-            <td class="px-6 py-3 text-gray-600 font-bold">Nama</td>
-            <td class="px-6 py-3 text-gray-900">{{ $siswa->nama }}</td>
-        </tr>
-        <tr>
-            <td class="px-6 py-3 text-gray-600 font-bold">Status</td>
-            <td class="px-6 py-3 text-gray-900">{{ ucfirst($siswa->status) }}</td>
-        </tr>
-        <tr>
-            <td class="px-6 py-3 text-gray-600 font-bold">Total Nilai</td>
-            <td class="px-6 py-3 text-gray-900">{{ $total_nilai }}</td>
-        </tr>
-        <tr>
-            <td class="px-6 py-3 text-gray-600 font-bold">Nilai Rata-rata</td>
-            <td class="px-6 py-3 text-gray-900">{{ $nilai_rata }}</td>
-        </tr>
-    </tbody>
-</table>
+    <div class="container">
 
-<h4 class="text-center lg:text-xl text-xl font-bold dark:text-white mb-4">Rapor Siswa</h4>
-<table class="table-auto w-full text-sm text-left text-black dark:text-gray-400">
-    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-        <tr>
-            <th class="px-6 py-3">No.</th>
-            <th class="px-6 py-3">Mata Pelajaran</th>
-            <th class="px-6 py-3">Nilai KKM</th>
-            <th class="px-6 py-3">PTS Ganjil</th>
-            <th class="px-6 py-3">PTS Genap</th>
-            <th class="px-6 py-3">UAS</th>
-            <th class="px-6 py-3">UKK</th>
-            <th class="px-6 py-3">Nilai Total</th>
-            <th class="px-6 py-3">Keterangan</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($data_raport_siswa as $index => $nilai)
-            <tr>
-                <td class="px-6 py-4">{{ $index + 1 }}</td>
-                <td class="px-6 py-4">{{ $nilai->mata_pelajarans->nama_mata_pelajaran }}</td>
-                <td class="px-6 py-4">{{ $nilai->mata_pelajarans->nilai_kkm }}</td>
-                <td class="px-6 py-4">{{ $nilai->pts_ganjil }}</td>
-                <td class="px-6 py-4">{{ $nilai->pts_genap }}</td>
-                <td class="px-6 py-4">{{ $nilai->uas }}</td>
-                <td class="px-6 py-4">{{ $nilai->ukk }}</td>
-                <td class="px-6 py-4">{{ $nilai->nilai_total }}</td>
-                <td class="text-center">
-                    @if ($nilai->mata_pelajarans->nilai_kkm < $nilai->nilai_total)
-                        <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm">Terpenuhi</span>
-                    @else
-                        <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm">Tidak Terpenuhi</span>
-                    @endif
-                </td>
-            </tr>
-        @endforeach
-    </tbody>
-</table>
+        <!-- Student Data Section -->
+        <div class="">
+            <h4 class="">Data Siswa</h4>
+            <table class="">
+                <tbody>
+                    <tr>
+                        <td class="">NIS</td>
+                        <td class="">{{ $siswa->nis }}</td>
+                    </tr>
+                    <tr>
+                        <td class="">Nama</td>
+                        <td class="">{{ $siswa->nama }}</td>
+                    </tr>
+                    <tr>
+                        <td class="">Status</td>
+                        <td class="">{{ ucfirst($siswa->status) }}</td>
+                    </tr>
+                    <tr>
+                        <td class="">Total Nilai</td>
+                        <td class="">{{ $total_nilai }}</td>
+                    </tr>
+                    <tr>
+                        <td class="">Nilai Rata-rata</td>
+                        <td class="">{{ $nilai_rata }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Report Card Table -->
+        <!-- Menu Rapor Siswa -->
+        <div class="">
+            <h4 class="">Menu Rapor Siswa</h4>
+
+            <table class="">
+                <thead class="">
+                    <tr class="">
+                        <th class="" rowspan="2">No.</th>
+                        <th class="" rowspan="2">Mata Pelajaran</th>
+                        <th class="" colspan="3">Pengetahuan (KI-3)</th>
+                        <th class="" colspan="3">Keterampilan (KI-4)</th>
+                        <th class="" rowspan="2">Nilai Rata-rata</th>
+                        <th class="" rowspan="2">Nilai Total</th>
+                        <th class="" rowspan="2">Keterangan</th>
+
+                    </tr>
+                    <tr>
+                        <th class="">Angka</th>
+                        <th class="">Predikat</th>
+                        <th class="">Deskripsi</th>
+                        <th class="">Angka</th>
+                        <th class="">Predikat</th>
+                        <th class="">Deskripsi</th>
+                    </tr>
+                </thead>
+                <tbody class="">
+                    @foreach ($data_raport_siswa as $index => $nilai)
+                        <tr class="">
+                            <td class="">{{ $index + 1 }}</td>
+                            <td class="">{{ $nilai->mata_pelajarans->nama_mata_pelajaran }}
+                            </td>
+                            <td class="">{{ $nilai->nilai_angka_pengetahuan }}
+                            </td>
+                            <td class="">
+                                {{ $nilai->nilai_predikat_pengetahuan }}
+                            </td>
+                            <td class="">{{ $nilai->deskripsi_pengetahuan }}</td>
+                            <td class="">
+                                {{ $nilai->nilai_angka_keterampilan }}
+                            </td>
+                            <td class="">
+                                {{ $nilai->nilai_predikat_keterampilan }}
+                            </td>
+                            <td class="">{{ $nilai->deskripsi_keterampilan }}</td>
+                            <td class="">{{ $nilai->nilai_rata_rata }}</td>
+                            <td class="">{{ $nilai->nilai_total }}</td>
+                            <td class="">
+                                @if ($nilai->keterangan == 'Terpenuhi')
+                                    <span class="">Terpenuhi</span>
+                                @elseif ($nilai->keterangan == 'Tidak Terpenuhi')
+                                    <span class="">Tidak
+                                        Terpenuhi</span>
+                                @else
+                                    <span class="">Belum
+                                        di nilai</span>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+                <tfoot>
+                    <tr class="">
+                        <td class="">#</td>
+                        <td class=" " colspan="7">Jumlah</td>
+                        <td class=" ">{{ $total_nilai_rata }}</td>
+                        <td class=" ">{{ $total_nilai }}</td>
+                        <td class="  "></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>

@@ -61,12 +61,15 @@ class MataPelajaranController extends Controller
                         [
                             'siswa_id' => $siswa->id,
                             'mata_pelajaran_id' => $dataMapel->id,
-                            'pts_ganjil' => 0,
-                            'pts_genap' => 0,
-                            'uas' => 0,
-                            'ukk' => 0,
+                            'nilai_angka_pengetahuan' => 0,
+                            'nilai_predikat_pengetahuan' => "-",
+                            'deskripsi_pengetahuan' => "",
+                            'nilai_angka_keterampilan' => 0,
+                            'nilai_predikat_keterampilan' => "-",
+                            'deskripsi_keterampilan' => "",
+                            'nilai_rata_rata' => 0,
                             'nilai_total' => 0,
-                            'keterangan' => 'belum di nilai'
+                            'keterangan' => 'Belum di nilai'
                         ]
                     );
                 }

@@ -78,48 +78,73 @@
 
     </div>
 
+    <!-- Menu Rapor Siswa -->
     <div class="relative p-5 mb-8 overflow-x-auto dark:bg-gray-800 shadow-md sm:rounded-lg">
         <h4 class="text-center lg:text-xl text-xl font-bold dark:text-white mb-4">Menu Rapor Siswa</h4>
-        <table class="table-auto w-full text-sm text-left text-black dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+
+        <table class="min-w-full bg-white dark:bg-gray-800 rounded-lg shadow-md border border-black">
+            <thead class="text-xs bg-gray-100">
                 <tr>
-                    <th class="px-6 py-3">No.</th>
-                    <th class="px-6 py-3">Mata Pelajaran</th>
-                    <th class="px-6 py-3">Nilai KKM</th>
-                    <th class="px-6 py-3">PTS Ganjil</th>
-                    <th class="px-6 py-3">PTS Genap</th>
-                    <th class="px-6 py-3">UAS</th>
-                    <th class="px-6 py-3">UKK</th>
-                    <th class="px-6 py-3">Nilai Total</th>
-                    <th class="px-6 py-3">Keterangan</th>
+                    <th class="px-4 py-2 text-center border border-black" rowspan="2">No.</th>
+                    <th class="px-4 py-2 text-center border border-black" rowspan="2">Mata Pelajaran</th>
+                    <th class="px-4 py-2 text-center border border-black" colspan="3">Pengetahuan (KI-3)</th>
+                    <th class="px-4 py-2 text-center border border-black" colspan="3">Keterampilan (KI-4)</th>
+                    <th class="px-4 py-2 text-center border border-black" rowspan="2">Nilai Rata-rata</th>
+                    <th class="px-4 py-2 text-center border border-black" rowspan="2">Nilai Total</th>
+                    <th class="px-4 py-2 text-center border border-black" rowspan="2">Keterangan</th>
+                </tr>
+                <tr>
+                    <th class="px-4 py-2 text-center border border-black">Angka</th>
+                    <th class="px-4 py-2 text-center border border-black">Predikat</th>
+                    <th class="px-4 py-2 text-center border border-black">Deskripsi</th>
+                    <th class="px-4 py-2 text-center border border-black">Angka</th>
+                    <th class="px-4 py-2 text-center border border-black">Predikat</th>
+                    <th class="px-4 py-2 text-center border border-black">Deskripsi</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="text-sm text-gray-900 dark:text-gray-300">
                 @foreach ($data_raport_siswa as $index => $nilai)
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <td class="px-6 py-4">{{ $index + 1 }}</td>
-                        <td class="px-6 py-4">{{ $nilai->mata_pelajarans->nama_mata_pelajaran }}</td>
-                        <td class="px-6 py-4 ">{{ $nilai->mata_pelajarans->nilai_kkm }}</td>
-                        <td class="px-6 py-4">{{ $nilai->pts_ganjil }}</td>
-                        <td class="px-6 py-4">{{ $nilai->pts_genap }}</td>
-                        <td class="px-6 py-4">{{ $nilai->uas }}</td>
-                        <td class="px-6 py-4">{{ $nilai->ukk }}</td>
-                        <td class="px-6 py-4">{{ $nilai->nilai_total }}</td>
-                        <td class="text-center">
-                            @if ($nilai->mata_pelajarans->nilai_kkm < $nilai->nilai_total)
+                    <tr
+                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <td class="px-4 py-2 text-center border border-black">{{ $index + 1 }}</td>
+                        <td class="px-4 py-2 border border-black">{{ $nilai->mata_pelajarans->nama_mata_pelajaran }}
+                        </td>
+                        <td class="px-4 py-2 text-center border border-black">{{ $nilai->nilai_angka_pengetahuan }}</td>
+                        <td class="px-4 py-2 text-center border border-black">{{ $nilai->nilai_predikat_pengetahuan }}
+                        </td>
+                        <td class="px-4 py-2 border border-black">{{ $nilai->deskripsi_pengetahuan }}</td>
+                        <td class="px-4 py-2 text-center border border-black">{{ $nilai->nilai_angka_keterampilan }}
+                        </td>
+                        <td class="px-4 py-2 text-center border border-black">{{ $nilai->nilai_predikat_keterampilan }}
+                        </td>
+                        <td class="px-4 py-2 border border-black">{{ $nilai->deskripsi_keterampilan }}</td>
+                        <td class="px-4 py-2 text-center border border-black">{{ $nilai->nilai_rata_rata }}</td>
+                        <td class="px-4 py-2 text-center border border-black">{{ $nilai->nilai_total }}</td>
+                        <td class="px-4 py-2 text-center border border-black">
+                            @if ($nilai->keterangan == 'Terpenuhi')
                                 <span
-                                    class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-green-400 border border-green-400">Terpenuhi</span>
-                                </span>
+                                    class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-green-400 border border-green-400">Terpenuhi</span>
+                            @elseif ($nilai->keterangan == 'Tidak Terpenuhi')
+                                <span
+                                    class="bg-red-100 block text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-red-400 border border-red-400">Tidak
+                                    Terpenuhi</span>
                             @else
                                 <span
-                                    class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-red-400 border border-red-400">Tidak
-                                    Terpenuhi</span>
+                                    class="bg-yellow-100 block text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400">Belum
+                                    di nilai</span>
                             @endif
-
                         </td>
                     </tr>
                 @endforeach
             </tbody>
+            <tfoot>
+                <tr class="">
+                    <td class="px-4 py-2">#</td>
+                    <td class="px-4 py-2 text-left border border-black font-bold" colspan="7">Jumlah</td>
+                    <td class="px-4 py-2 text-center font-bold border border-black ">{{ $total_nilai_rata }}</td>
+                    <td class="px-4 py-2 text-center font-bold border border-black ">{{ $total_nilai }}</td>
+                </tr>
+            </tfoot>
         </table>
     </div>
 

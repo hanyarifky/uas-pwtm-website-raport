@@ -18,6 +18,7 @@ use App\Http\Controllers\RaportController;
 use App\Http\Controllers\MataPelajaranController;
 use App\Http\Controllers\UserSiswaController;
 
+// Cetak Raport
 Route::get('/siswa/raport/excel', function () {
     $siswa = Siswa::find(Auth::user()->siswa_id);
     return Excel::download(new RaportExport($siswa), "raport_siswa_" . $siswa->nis . ".xlsx");
@@ -27,10 +28,12 @@ Route::get('/siswa/raport/pdf', function () {
     $totalNilai = 0;
     $totalMapel = 0;
     $nilai_rata = 0;
+    $totalNilaiRata = 0;
     $siswa = Siswa::find(Auth::user()->siswa_id);
     $dataRaportSiswa = Nilai::with(['siswas', 'mata_pelajarans'])->where('siswa_id', $siswa->id)->get();
     foreach ($dataRaportSiswa as $nilai) {
         $totalNilai += $nilai->nilai_total;
+        $totalNilaiRata += $nilai->nilai_rata_rata;
         $totalMapel++;
     }
     $nilai_rata = $totalNilai / $totalMapel;
@@ -43,6 +46,7 @@ Route::get('/siswa/raport/pdf', function () {
             "siswa" => $siswa,
             "data_raport_siswa" => $dataRaportSiswa,
             "total_nilai" => $totalNilai,
+            "total_nilai_rata" => $totalNilaiRata,
             "nilai_rata" => $nilai_rata
         ]
     );
@@ -95,7 +99,7 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/admin/raport/siswa/{siswa}', [RaportController::class, 'show'])->name('raport.siswa');
     Route::get('/admin/raport/nilai/{nilai}/edit', [RaportController::class, 'edit'])->name('raport.nilai');
     Route::get('/admin/raport/siswa/{siswa}/excel', [RaportController::class, 'export_excel']);
-    Route::put('/admin/raport/nilai/{nilai}/', [RaportController::class, 'nilai']);
+    Route::put('/admin/raport/nilai/{nilai}/', [RaportController::class, 'nilai'])->name('raport.nilai.submit');
     Route::get('/admin/raport/siswa/{siswa}/pdf', [RaportController::class, 'export_pdf']);
 });
 

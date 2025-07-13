@@ -7,7 +7,7 @@
     <title>Daftar Siswa</title>
     <style>
         @page{
-            margin: 20px;
+            margin: 30px;
         }
         
         body{

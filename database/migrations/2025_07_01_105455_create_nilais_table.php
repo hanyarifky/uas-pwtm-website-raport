@@ -15,11 +15,15 @@ return new class extends Migration
             $table->id();
             $table->foreignId('siswa_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('mata_pelajaran_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('pts_ganjil');
-            $table->integer('pts_genap');
-            $table->integer('uas');
-            $table->integer('ukk');
+            $table->integer('nilai_angka_pengetahuan');
+            $table->enum('nilai_predikat_pengetahuan', ['A', 'B', 'C', 'D', '-'])->default('-');
+            $table->string('deskripsi_pengetahuan');
+            $table->integer('nilai_angka_keterampilan');
+            $table->enum('nilai_predikat_keterampilan', ['A', 'B', 'C', 'D', '-'])->default('-');;
+            $table->string('deskripsi_keterampilan');
+            $table->integer('nilai_rata_rata');
             $table->integer('nilai_total');
+            $table->enum('keterangan', ["Terpenuhi", "Tidak Terpenuhi", "Belum di nilai"])->default("Belum di nilai");
             $table->timestamps();
         });
     }
