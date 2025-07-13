@@ -24,9 +24,11 @@ class RaportExport implements FromView
         $totalNilai = 0;
         $totalMapel = 0;
         $nilai_rata = 0;
+        $totalNilaiRata = 0;
         $dataRaportSiswa = Nilai::with(['siswas', 'mata_pelajarans'])->where('siswa_id', $this->siswa->id)->get();
         foreach ($dataRaportSiswa as $nilai) {
             $totalNilai += $nilai->nilai_total;
+            $totalNilaiRata += $nilai->nilai_rata_rata;
             $totalMapel++;
         }
         $nilai_rata = $totalNilai / $totalMapel;
@@ -39,7 +41,8 @@ class RaportExport implements FromView
                 "siswa" => $this->siswa,
                 "data_raport_siswa" => $dataRaportSiswa,
                 "total_nilai" => $totalNilai,
-                "nilai_rata" => $nilai_rata
+                "nilai_rata" => $nilai_rata,
+                "total_nilai_rata" => $totalNilaiRata
             ]
         );
     }

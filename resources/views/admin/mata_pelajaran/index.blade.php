@@ -28,7 +28,7 @@
                     class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700">
                     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
                         <li>
-                            <a href="/admin/kelola-user/tambah-user"
+                            <a href="/admin/mata-pelajaran/pdf"
                                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Cetak
                                 PDF</a>
                         </li>
@@ -65,11 +65,6 @@
                     </th>
                     <th>
                         <span class="flex items-center">
-                            Jumlah Jam
-                        </span>
-                    </th>
-                    <th>
-                        <span class="flex items-center">
                             Aksi
                         </span>
                     </th>
@@ -83,8 +78,6 @@
                         <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $mapel->nama_mata_pelajaran }}
                         </td>
                         <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $mapel->nilai_kkm }}
-                        </td>
-                        <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $mapel->jumlah_jam }} Menit
                         </td>
                         <td class=" flex font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             <a href="/admin/mata-pelajaran/{{ $mapel->id }}/edit"

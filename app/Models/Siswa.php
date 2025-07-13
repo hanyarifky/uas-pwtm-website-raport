@@ -16,4 +16,9 @@ class Siswa extends Model
     {
         return $this->hasMany(Nilai::class, 'siswa_id');
     }
+
+    public function users()
+    {
+        return $this->hasOne(User::class);
+    }
 }

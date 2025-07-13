@@ -6,6 +6,7 @@ use App\Models\Nilai;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 use App\Exports\RaportExport;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 
 class RaportController extends Controller
@@ -26,10 +27,12 @@ class RaportController extends Controller
     {
         $totalNilai = 0;
         $totalMapel = 0;
+        $totalNilaiRata = 0;
         $nilai_rata = 0;
         $dataRaportSiswa = Nilai::with(['siswas', 'mata_pelajarans'])->where('siswa_id', $siswa->id)->get();
         foreach ($dataRaportSiswa as $nilai) {
             $totalNilai += $nilai->nilai_total;
+            $totalNilaiRata += $nilai->nilai_rata_rata;
             $totalMapel++;
         }
         $nilai_rata = $totalNilai / $totalMapel;
@@ -42,6 +45,7 @@ class RaportController extends Controller
                 "siswa" => $siswa,
                 "data_raport_siswa" => $dataRaportSiswa,
                 "total_nilai" => $totalNilai,
+                "total_nilai_rata" => $totalNilaiRata,
                 "nilai_rata" => $nilai_rata
             ]
         );
@@ -59,20 +63,22 @@ class RaportController extends Controller
         // dd($request->all());
 
         $rulesData = [
-            'pts_ganjil' => 'required|integer',
-            'pts_genap' => 'required|integer',
-            'uas' => 'required|integer',
-            'ukk' => 'required|integer'
+            'nilai_angka_pengetahuan' => 'required|integer|min:1|max:100',
+            'deskripsi_pengetahuan' => 'required|string',
+            'nilai_angka_keterampilan' => 'required|integer|min:1|max:100',
+            'deskripsi_keterampilan' => 'required|string'
         ];
 
         $validateData = $request->validate($rulesData);
 
         if ($validateData) {
-            $pts_ganjil = $validateData['pts_ganjil']; // Bobot 20%
-            $pts_genap = $validateData['pts_genap']; // Bobot 20%
-            $uas = $validateData['uas']; // Bobot 30%
-            $ukk = $validateData['pts_ganjil']; // Bobot 30%
-            $validateData['nilai_total'] = ($pts_ganjil * 0.20) + ($pts_genap * 0.20) + ($uas * 0.30) + ($ukk * 0.30);
+            $validateData['nilai_predikat_pengetahuan'] = $this->predikatNilai($validateData['nilai_angka_pengetahuan']);
+            $validateData['nilai_predikat_keterampilan'] = $this->predikatNilai($validateData['nilai_angka_keterampilan']);
+            $validateData['nilai_total'] = $validateData['nilai_angka_pengetahuan'] + $validateData['nilai_angka_keterampilan'];
+            $validateData['nilai_rata_rata'] = $validateData['nilai_total'] / 2;
+            $validateData['keterangan'] = ($nilai->mata_pelajarans->nilai_kkm < $validateData['nilai_angka_pengetahuan'] && $nilai->mata_pelajarans->nilai_kkm < $validateData['nilai_angka_keterampilan']) ? "Terpenuhi" : "Tidak Terpenuhi";
+
+            // return $validateData;
         }
 
 
@@ -90,6 +96,53 @@ class RaportController extends Controller
 
     public function export_excel(Siswa $siswa)
     {
-        return Excel::download(new RaportExport($siswa), "raport_siswa.xlsx");
+        return Excel::download(new RaportExport($siswa), "raport_siswa_" . $siswa->nis . ".xlsx");
+    }
+
+    public function export_pdf(Siswa $siswa)
+    {
+
+        $totalNilai = 0;
+        $totalMapel = 0;
+        $nilai_rata = 0;
+        $totalNilaiRata = 0;
+        $dataRaportSiswa = Nilai::with(['siswas', 'mata_pelajarans'])->where('siswa_id', $siswa->id)->get();
+        foreach ($dataRaportSiswa as $nilai) {
+            $totalNilai += $nilai->nilai_total;
+            $totalNilaiRata += $nilai->nilai_rata_rata;
+            $totalMapel++;
+        }
+        $nilai_rata = $totalNilai / $totalMapel;
+        // echo "Total Nilai = " . $totalNilai . "<br>";
+        // echo "Nilai Rata-rata = " . $nilai_rata;
+
+        $pdf = Pdf::loadView(
+            'pdf.raport-pdf',
+            [
+                "siswa" => $siswa,
+                "data_raport_siswa" => $dataRaportSiswa,
+                "total_nilai" => $totalNilai,
+                "nilai_rata" => $nilai_rata,
+                "total_nilai_rata" => $totalNilaiRata,
+            ]
+        );
+        $pdf->setOption('isRemoteEnabled', true);
+        $pdf->setOption('isHtml5ParserEnabled', true);
+        $pdf->setOption('isPhpEnabled', true);
+        return $pdf->setPaper('A4', 'landscape')->stream("raport_siswa_" . $siswa->nis . ".pdf");
+    }
+
+    public function predikatNilai($nilai)
+    {
+
+        if ($nilai > 85) {
+            return "A";
+        } else if ($nilai <= 85 && $nilai > 75) {
+            return "B";
+        } else if ($nilai <= 75 && $nilai > 65) {
+            return "C";
+        } else {
+            return "D";
+        }
     }
 }

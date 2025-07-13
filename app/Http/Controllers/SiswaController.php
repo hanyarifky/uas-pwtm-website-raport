@@ -7,6 +7,7 @@ use App\Models\Siswa;
 use App\Exports\SiswaExport;
 use Illuminate\Http\Request;
 use App\Models\MataPelajaran;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\StoreSiswaRequest;
 use App\Http\Requests\UpdateSiswaRequest;
@@ -75,12 +76,15 @@ class SiswaController extends Controller
                     [
                         'siswa_id' => $siswa->id,
                         'mata_pelajaran_id' => $mapel->id,
-                        'pts_ganjil' => 0,
-                        'pts_genap' => 0,
-                        'uas' => 0,
-                        'ukk' => 0,
+                        'nilai_angka_pengetahuan' => 0,
+                        'nilai_predikat_pengetahuan' => "-",
+                        'deskripsi_pengetahuan' => "",
+                        'nilai_angka_keterampilan' => 0,
+                        'nilai_predikat_keterampilan' => "-",
+                        'deskripsi_keterampilan' => "",
+                        'nilai_rata_rata' => 0,
                         'nilai_total' => 0,
-                        'keterangan' => 'belum di nilai'
+                        'keterangan' => 'Belum di nilai'
                     ]
                 );
             }
@@ -160,6 +164,15 @@ class SiswaController extends Controller
 
         alert()->success('Berhasil di Hapus', 'Data Siswa Berhasil di Hapus');
         return redirect('/admin/siswa');
+    }
+
+    public function export_pdf()
+    {
+        $pdf = Pdf::loadView('pdf.siswa-pdf', ["siswas" => Siswa::orderBy('nama', 'asc')->get()]);
+        $pdf->setOption('isRemoteEnabled', true);
+        $pdf->setOption('isHtml5ParserEnabled', true);
+        $pdf->setOption('isPhpEnabled', true);
+        return $pdf->setPaper('A4', 'landscape')->stream("data_siswa.pdf");
     }
 
     public function export_excel()
