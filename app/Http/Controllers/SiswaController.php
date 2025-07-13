@@ -7,6 +7,7 @@ use App\Models\Siswa;
 use App\Exports\SiswaExport;
 use Illuminate\Http\Request;
 use App\Models\MataPelajaran;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\StoreSiswaRequest;
 use App\Http\Requests\UpdateSiswaRequest;
@@ -160,6 +161,15 @@ class SiswaController extends Controller
 
         alert()->success('Berhasil di Hapus', 'Data Siswa Berhasil di Hapus');
         return redirect('/admin/siswa');
+    }
+
+    public function export_pdf()
+    {
+        $pdf = Pdf::loadView('pdf.siswa-pdf', ["siswas" => Siswa::orderBy('nama', 'asc')->get()]);
+        $pdf->setOption('isRemoteEnabled', true);
+        $pdf->setOption('isHtml5ParserEnabled', true);
+        $pdf->setOption('isPhpEnabled', true);
+        return $pdf->setPaper('A4', 'landscape')->stream("data_siswa.pdf");
     }
 
     public function export_excel()

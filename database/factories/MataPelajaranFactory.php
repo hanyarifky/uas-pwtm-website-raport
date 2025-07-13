@@ -21,7 +21,6 @@ class MataPelajaranFactory extends Factory
             'kode_mata_pelajaran' => $this->faker->unique()->word . $this->faker->numberBetween(1, 100), // Contoh kode mata pelajaran
             'nama_mata_pelajaran' => $this->faker->word . ' ' . $this->faker->word, // Nama mata pelajaran
             'nilai_kkm' => $this->faker->numberBetween(60, 100), // Nilai KKM antara 60 sampai 100
-            'jumlah_jam' => $this->faker->numberBetween(1, 6), // Jumlah jam pelajaran antara 1 sampai 6
         ];
     }
 }

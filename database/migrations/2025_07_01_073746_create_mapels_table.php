@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("kode_mata_pelajaran");
             $table->string("nama_mata_pelajaran");
             $table->integer("nilai_kkm");
-            $table->integer("jumlah_jam");
+            // $table->integer("jumlah_jam");
             $table->timestamps();
         });
     }

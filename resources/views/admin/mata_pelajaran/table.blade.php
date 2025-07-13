@@ -17,11 +17,6 @@
                             Nilai KKM
                         </span>
                     </th>
-                    <th>
-                        <span class="flex items-center">
-                            Jumlah Jam
-                        </span>
-                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -32,8 +27,6 @@
                         <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $mapel->nama_mata_pelajaran }}
                         </td>
                         <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $mapel->nilai_kkm }}
-                        </td>
-                        <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $mapel->jumlah_jam }} Menit
                         </td>
                         {{-- <td class=" flex font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             <a href="/admin/mata-pelajaran/{{ $mapel->id }}/edit"

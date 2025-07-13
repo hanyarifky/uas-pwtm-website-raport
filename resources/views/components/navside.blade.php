@@ -77,7 +77,7 @@
 
                     @if (Auth::user()->role == 'admin')
                         <li>
-                            <x-navlink href="/" :active="request()->is('/')" text="Dashboard">
+                            <x-navlink href="/admin" :active="request()->is('/admin')" text="Dashboard">
                                 <path
                                     d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
                                 <path
@@ -128,7 +128,7 @@
                             <form action="/logout" method="POST">
                                 @csrf
                                 <button type="submit"
-                                    class="flex w-full items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                    class="flex cursor-pointer w-full items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                                     <svg g
                                         class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"

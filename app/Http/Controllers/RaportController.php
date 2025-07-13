@@ -6,6 +6,7 @@ use App\Models\Nilai;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 use App\Exports\RaportExport;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 
 class RaportController extends Controller
@@ -90,6 +91,36 @@ class RaportController extends Controller
 
     public function export_excel(Siswa $siswa)
     {
-        return Excel::download(new RaportExport($siswa), "raport_siswa.xlsx");
+        return Excel::download(new RaportExport($siswa), "raport_siswa_" . $siswa->nis . ".xlsx");
+    }
+
+    public function export_pdf(Siswa $siswa)
+    {
+
+        $totalNilai = 0;
+        $totalMapel = 0;
+        $nilai_rata = 0;
+        $dataRaportSiswa = Nilai::with(['siswas', 'mata_pelajarans'])->where('siswa_id', $siswa->id)->get();
+        foreach ($dataRaportSiswa as $nilai) {
+            $totalNilai += $nilai->nilai_total;
+            $totalMapel++;
+        }
+        $nilai_rata = $totalNilai / $totalMapel;
+        // echo "Total Nilai = " . $totalNilai . "<br>";
+        // echo "Nilai Rata-rata = " . $nilai_rata;
+
+        $pdf = Pdf::loadView(
+            'pdf.raport-pdf',
+            [
+                "siswa" => $siswa,
+                "data_raport_siswa" => $dataRaportSiswa,
+                "total_nilai" => $totalNilai,
+                "nilai_rata" => $nilai_rata
+            ]
+        );
+        $pdf->setOption('isRemoteEnabled', true);
+        $pdf->setOption('isHtml5ParserEnabled', true);
+        $pdf->setOption('isPhpEnabled', true);
+        return $pdf->setPaper('A4', 'landscape')->stream("raport_siswa_" . $siswa->nis . ".pdf");
     }
 }

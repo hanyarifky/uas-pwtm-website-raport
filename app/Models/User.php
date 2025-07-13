@@ -42,5 +42,8 @@ class User extends Authenticatable
         ];
     }
 
-    
+    public function siswas()
+    {
+        return $this->belongsTo(Siswa::class);
+    }
 }

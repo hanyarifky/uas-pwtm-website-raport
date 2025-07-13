@@ -39,7 +39,7 @@ class UserController extends Controller
         return view(
             'admin.user.createSiswa',
             [
-                "data_siswa" => Siswa::all()
+                "data_siswa" => Siswa::whereDoesntHave('users')->get()
             ]
         );
     }

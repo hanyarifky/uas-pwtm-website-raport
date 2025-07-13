@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('12345678'),
         ]);
 
-        Siswa::factory()->count(2)->create();
+        // Siswa::factory()->count(2)->create();
         $this->call(MataPelajaranSeeder::class);
     }
 }

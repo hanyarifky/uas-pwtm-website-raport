@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Nilai;
 use App\Models\Siswa;
-use App\Exports\MataPelajaranExport;
 use Illuminate\Http\Request;
 use App\Models\MataPelajaran;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\MataPelajaranExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class MataPelajaranController extends Controller
@@ -45,7 +46,7 @@ class MataPelajaranController extends Controller
                 'kode_mata_pelajaran' => 'required|string|unique:mata_pelajarans,kode_mata_pelajaran',
                 'nama_mata_pelajaran' => 'required|string',
                 'nilai_kkm' => 'required',
-                'jumlah_jam' => 'required'
+
             ]
         );
 
@@ -111,7 +112,6 @@ class MataPelajaranController extends Controller
         $rulesData = [
             'nama_mata_pelajaran' => 'required|string',
             'nilai_kkm' => 'required',
-            'jumlah_jam' => 'required'
         ];
 
         if ($request->kode_mata_pelajaran != $mataPelajaran->kode_mata_pelajaran) {
@@ -140,6 +140,15 @@ class MataPelajaranController extends Controller
 
         alert()->success('Berhasil di Hapus', 'Data Mata Pelajaran Berhasil di Hapus');
         return redirect('/admin/mata-pelajaran');
+    }
+
+    public function export_pdf()
+    {
+        $pdf = Pdf::loadView('pdf.mata-pelajaran-pdf', ["mapels" => MataPelajaran::orderBy('id', 'asc')->get()]);
+        $pdf->setOption('isRemoteEnabled', true);
+        $pdf->setOption('isHtml5ParserEnabled', true);
+        $pdf->setOption('isPhpEnabled', true);
+        return $pdf->setPaper('A4', 'landscape')->stream("data_mata_pelajaran.pdf");
     }
 
     public function export_excel()

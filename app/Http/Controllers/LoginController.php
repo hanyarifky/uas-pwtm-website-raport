@@ -33,9 +33,10 @@ class LoginController extends Controller
 
             if (Auth::user()->role == 'siswa') {
                 return redirect()->intended('/siswa');
-            }
+            } else {
 
-            return redirect()->intended('/admin');
+                return redirect()->intended('/admin');
+            }
         }
 
         alert()->error('Login Gagal', "UserId atau Password yang anda masukkan salah!");
